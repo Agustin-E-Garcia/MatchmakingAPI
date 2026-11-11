@@ -30,8 +30,8 @@ public class AuthService
         _database.player.Add(player);
         await _database.SaveChangesAsync();
 
-        await _stats.RegisterPlayerStats(0, 0, 0, 0);
-
+        await _stats.InitializePlayerStats(player.Id);
+        
         return new AuthResponse(_tokens.CreateToken(player), player.Username);
     }
 
