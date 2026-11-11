@@ -1,5 +1,8 @@
+using GameMatchmaking.Extensions;
+using GameMatchmaking.Migrations;
 using GameMatchmaking.Models;
 using GameMatchmaking.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameMatchmaking.Controllers;
@@ -38,5 +41,16 @@ public class AuthController : ControllerBase
             return Conflict("Wrong username or password");
 
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            Id = User.GetPlayerID(),
+            Username = User.FindFirst("unique_name")?.Value
+        });
     }
 }

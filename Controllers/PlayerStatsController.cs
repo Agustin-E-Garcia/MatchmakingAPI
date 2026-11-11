@@ -1,4 +1,6 @@
+using GameMatchmaking.Extensions;
 using GameMatchmaking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameMatchmaking.Controllers;
@@ -23,10 +25,12 @@ public class PlayerStatsController : ControllerBase
         return Ok(entry);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<StatsEntry>> RegisterPlayer(RegisterPlayerStatsRequest request)
     {
-        if(request.id <= 0) return BadRequest("Player ID can't be 0 or negative value");
+        int id = User.GetPlayerID();
+        if(id <= 0) return BadRequest("Player ID can't be 0 or negative value");
 
         var entry = await _statsService.RegisterPlayerStats(request.matchesPlayed, request.kills, request.deaths, request.assists);
         return Ok(entry);
