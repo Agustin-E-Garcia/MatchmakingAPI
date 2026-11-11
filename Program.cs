@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<GameMatchmaking.Data.PlayerAuthDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("AuthDB")));
+builder.Services.AddScoped<GameMatchmaking.Services.AuthService>();
 
+builder.Services.AddDbContext<GameMatchmaking.Data.StatsDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("StatsDB")));
+builder.Services.AddScoped<GameMatchmaking.Services.StatsService>();
+
+builder.Services.AddSingleton<GameMatchmaking.Services.TokenService>();
+builder.Services.AddSingleton<GameMatchmaking.Services.MatchmakingService>();
+
+builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -14,4 +25,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
