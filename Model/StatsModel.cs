@@ -10,4 +10,4 @@ public class StatsEntry
     public int Elo { get; set; }
 }
 
-public record RegisterPlayerStatsRequest(int id, int matchesPlayed, int kills, int deaths, int assists);
+public record RegisterPlayerStatsRequest(int kills, int deaths, int assists);

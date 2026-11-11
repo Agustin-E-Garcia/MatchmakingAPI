@@ -1,5 +1,4 @@
 using GameMatchmaking.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameMatchmaking.Services;
 
@@ -33,19 +32,19 @@ public class StatsService
         return entry;
     }
 
-    public async Task<StatsEntry> RegisterPlayerStats(int matchesPlayed, int Kills, int Deaths, int Assists)
+    public async Task<StatsEntry?> RegisterPlayerStats(int id, int Kills, int Deaths, int Assists)
     {
-        var entry = new StatsEntry
-        {
-            MatchesPlayed = matchesPlayed,
-            Kills = Kills,
-            Deaths = Deaths,
-            Assists = Assists,
-            Elo = 0
-        };
+        StatsEntry? stats = await _Database.stats.FindAsync(id);
+        if(stats is null) return stats;
 
-        _Database.stats.Add(entry);
+        stats.MatchesPlayed++;
+        stats.Kills += Kills;
+        stats.Deaths += Deaths;
+        stats.Assists += Assists;
+        stats.Elo = (stats.Kills + stats.Assists) / int.Max(stats.Deaths, 1);
+
+        _Database.stats.Update(stats);
         await _Database.SaveChangesAsync();
-        return entry;
+        return stats;
     }
 }

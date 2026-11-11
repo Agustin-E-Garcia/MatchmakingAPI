@@ -30,9 +30,9 @@ public class PlayerStatsController : ControllerBase
     public async Task<ActionResult<StatsEntry>> RegisterPlayer(RegisterPlayerStatsRequest request)
     {
         int id = User.GetPlayerID();
-        if(id <= 0) return BadRequest("Player ID can't be 0 or negative value");
+        if(id <= 0) return BadRequest("Invalid Player ID");
 
-        var entry = await _statsService.RegisterPlayerStats(request.matchesPlayed, request.kills, request.deaths, request.assists);
+        var entry = await _statsService.RegisterPlayerStats(id, request.kills, request.deaths, request.assists);
         return Ok(entry);
     }
 }

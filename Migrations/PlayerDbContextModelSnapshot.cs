@@ -19,7 +19,6 @@ namespace GameMatchmaking.Migrations
             modelBuilder.Entity("GameMatchmaking.Models.StatsEntry", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Assists")

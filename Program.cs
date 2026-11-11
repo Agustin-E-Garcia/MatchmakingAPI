@@ -37,7 +37,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -48,5 +51,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<GameMatchmaking.Hubs.MatchmakingHub>("/matchmaking");
 app.MapControllers();
+
 app.Run();
